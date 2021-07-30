@@ -12,6 +12,7 @@ public class Prob_01_06 {
             "aaaaAA",
             "teehee",
             "taahaa",
+            "tooohooo"
         };
 
         for (String s : testStrs) {
