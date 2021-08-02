@@ -1,4 +1,4 @@
-public class Probl_01_09 {
+public class Prob_01_09 {
     
     public static void main(String[] args) {
         String s1 = "testing";
