@@ -56,6 +56,15 @@ public class LinkedListNode {
         return sb.toString(); 
     }
 
+    public static int getLength(LinkedListNode n) {
+        int len = 0;
+        while (n != null) {
+            ++len;
+            n = n.next;
+        }
+        return len;
+    }
+
     public static LinkedListNode buildSinglyLinkedList(int[] data) {
         if (data.length < 1) return null;
         LinkedListNode head = new LinkedListNode(data[0]);

@@ -9,6 +9,7 @@ public class Prob_02_05 {
             { {0}, {0} },
             { {0}, {3, 2, 1} },
             { {9, 9, 9, 9}, {1} },
+            { {9, 9, 9, 9}, {9, 9, 8} },
         };
         for (int i = 0; i < testData.length; ++i) {
             LinkedListNode a = LinkedListNode.buildSinglyLinkedList(testData[i][0]);
@@ -21,11 +22,14 @@ public class Prob_02_05 {
             System.out.printf("   %s\n", sumBackwardRecursive(a, b));
             System.out.println("sum forward iterative");
             System.out.printf("   %s\n", sumForwardIterative(a, b));
+            System.out.println("sum forward recursive");
+            System.out.printf("   %s\n", sumForwardRecursive(a, b));
             System.out.println();
         }
     }
     
     // Assumption: All digits in lists a and b are non-negative.
+    // (In a full solution, I would add validation to assert this assumption.)
 
     // Iterative solution for digits in reverse order (e.g. "3 > 2 > 1" means "123").
     private static LinkedListNode sumBackwardIterative(LinkedListNode a, LinkedListNode b) {
@@ -68,19 +72,18 @@ public class Prob_02_05 {
 
     // Recursive solution for digits in reverse order (e.g. "3 > 2 > 1" means "123").
     private static LinkedListNode sumBackwardRecursive(LinkedListNode a, LinkedListNode b) {
-        LinkedListNode result = sBRHelper(a, b, false);
+        LinkedListNode result = sbrHelper(a, b, false);
         return result != null ? result : new LinkedListNode(0);
     }
 
-    private static LinkedListNode sBRHelper(LinkedListNode a, LinkedListNode b, boolean carry) {
+    private static LinkedListNode sbrHelper(LinkedListNode a, LinkedListNode b, boolean carry) {
         if (a == null && b == null && !carry) return null;
 
         int digitSum = (a != null ? a.data : 0) + (b != null ? b.data : 0) + (carry ? 1 : 0);
         carry = digitSum >= 10;
-        digitSum %= 10;
 
-        LinkedListNode digit = new LinkedListNode(digitSum);
-        digit.next = sBRHelper((a != null ? a.next : null), (b != null ? b.next : null), carry);
+        LinkedListNode digit = new LinkedListNode(digitSum % 10);
+        digit.next = sbrHelper((a != null ? a.next : null), (b != null ? b.next : null), carry);
         return digit;
     }
 
@@ -119,7 +122,58 @@ public class Prob_02_05 {
 
     // Recursive solution for digits in standard order (e.g. "3 > 2 > 1" means "321").
     private static LinkedListNode sumForwardRecursive(LinkedListNode a, LinkedListNode b) {
-        // TODO:  implement this
-        return null;
+        if (a == null && b == null) {
+            return new LinkedListNode(0);
+        }
+
+        // Make lists a and b the same length.
+        int lenA = LinkedListNode.getLength(a);
+        int lenB = LinkedListNode.getLength(b);
+        if (lenA < lenB) {
+            a = padZeros(a, lenB-lenA);
+        } else {
+            b = padZeros(b, lenA-lenB);
+        }
+
+        NodeAndCarry nac = sfrHelper(a, b);
+        LinkedListNode result = nac.node;
+        if (nac.carry) {
+            LinkedListNode temp = new LinkedListNode(1);
+            temp.next = result;
+            result = temp;
+        }
+        return result;
+    }
+
+    // pre: a and b are the same length
+    // In a full implementation, I would add validation of the pre-condition.
+    private static NodeAndCarry sfrHelper(LinkedListNode a, LinkedListNode b) {
+        NodeAndCarry next = new NodeAndCarry();
+        if (a.next != null) {
+            // Here, we know b.next != null since a and b are the same length.
+            next = sfrHelper(a.next, b.next);
+        }
+
+        int digitSum = (a != null ? a.data : 0) + (b != null ? b.data : 0) + (next.carry ? 1 : 0);
+        NodeAndCarry current = new NodeAndCarry();
+        current.carry = digitSum >= 10;
+
+        current.node = new LinkedListNode(digitSum % 10);
+        current.node.next = next.node;
+        return current;
+    }
+
+    private static LinkedListNode padZeros(LinkedListNode head, int zeros) {
+        for ( ; zeros > 0; --zeros) {
+            LinkedListNode z = new LinkedListNode(0);
+            z.next = head;
+            head = z;
+        }
+        return head;
+    }
+
+    private static class NodeAndCarry {
+        LinkedListNode node;
+        boolean carry;
     }
 }
