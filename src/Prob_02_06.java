@@ -31,7 +31,7 @@ public class Prob_02_06 {
                 slow = slow.next;
                 break;
             }
-            s.add(slow.data);
+            s.push(slow.data);
             slow = slow.next;
             fast = fast.next.next;
         }
