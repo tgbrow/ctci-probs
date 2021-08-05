@@ -11,9 +11,9 @@ public class Prob_02_05 {
             { {9, 9, 9, 9}, {1} },
             { {9, 9, 9, 9}, {9, 9, 8} },
         };
-        for (int i = 0; i < testData.length; ++i) {
-            LinkedListNode a = LinkedListNode.buildSinglyLinkedList(testData[i][0]);
-            LinkedListNode b = LinkedListNode.buildSinglyLinkedList(testData[i][1]);
+        for (int[][] td : testData) {
+            LinkedListNode a = LinkedListNode.buildSinglyLinkedList(td[0]);
+            LinkedListNode b = LinkedListNode.buildSinglyLinkedList(td[1]);
             System.out.printf("a: %s\n", a);
             System.out.printf("b: %s\n", b);
             System.out.println("sum reverse iterative");
