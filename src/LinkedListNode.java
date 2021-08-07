@@ -56,6 +56,14 @@ public class LinkedListNode {
         return sb.toString(); 
     }
 
+    public void appendSingly(LinkedListNode other) {
+        LinkedListNode tail = this;
+        while (tail.next != null) {
+            tail = tail.next;
+        }
+        tail.next = other;
+    }
+
     public static int getLength(LinkedListNode n) {
         int len = 0;
         while (n != null) {
