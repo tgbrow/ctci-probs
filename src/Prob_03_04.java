@@ -8,19 +8,23 @@ public class Prob_03_04 {
         q.add(1);
         q.add(2);
         q.add(3);
+        System.out.println("  size: " + q.size());   // expect 3
         System.out.println("  peek: " + q.peek());   // expect 1
         System.out.println("remove: " + q.remove()); // expect 1
         System.out.println("   add: 4, 5");
         q.add(4);
         q.add(5);
+        System.out.println("  size: " + q.size());   // expect 4
         System.out.println("  peek: " + q.peek());   // expect 2
         System.out.println("remove: " + q.remove()); // expect 2
         System.out.println("   add: 6");
         q.add(6);
+        System.out.println("  size: " + q.size());   // expect 4
         System.out.println("  peek: " + q.peek());   // expect 3
         System.out.println("remove: " + q.remove()); // expect 3
         System.out.println("remove: " + q.remove()); // expect 4
         System.out.println("remove: " + q.remove()); // expect 5
+        System.out.println("  size: " + q.size());   // expect 1
         System.out.println("remove: " + q.remove()); // expect 6
         System.out.println("  peek: " + q.peek());   // expect null
     }
