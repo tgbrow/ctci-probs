@@ -11,21 +11,21 @@ public class Prob_03_06 {
         as.enqueue(new Cat("Garf"));
         as.enqueue(new Cat("Mr. B"));
 
-        System.out.println("dequeue cat: " + as.dequeueCat().name);
-        System.out.println("dequeue dog: " + as.dequeueDog().name);
-        System.out.println("dequeue cat: " + as.dequeueCat().name);
-        System.out.println("dequeue any: " + as.dequeueAny().name);
-        System.out.println("dequeue cat: " + as.dequeueCat().name);
-        System.out.println("dequeue any: " + as.dequeueAny().name);
+        System.out.println("dequeue cat: " + as.dequeueCat().getName());
+        System.out.println("dequeue dog: " + as.dequeueDog().getName());
+        System.out.println("dequeue cat: " + as.dequeueCat().getName());
+        System.out.println("dequeue any: " + as.dequeueAny().getName());
+        System.out.println("dequeue cat: " + as.dequeueCat().getName());
+        System.out.println("dequeue any: " + as.dequeueAny().getName());
     }
 
     private static class AnimalShelter {
         // These lists act as queues, where head is front of queue (oldest arrival).
-        LinkedList<AnimalRecord<Dog>> dogs;
-        LinkedList<AnimalRecord<Cat>> cats;
+        private LinkedList<AnimalRecord<Dog>> dogs;
+        private LinkedList<AnimalRecord<Cat>> cats;
         // For simplicity's sake, use a fake "clock" that counts up from zero each
         // time an animal is enqueued.
-        int fakeClock;
+        private int fakeClock;
 
         public AnimalShelter() {
             dogs = new LinkedList<>();
@@ -33,12 +33,14 @@ public class Prob_03_06 {
             fakeClock = 0;
         }
 
-        public void enqueue(Dog dog) {
-            dogs.add(new AnimalRecord<Dog>(dog, fakeClock++));
-        }
-
-        public void enqueue(Cat cat) {
-            cats.add(new AnimalRecord<Cat>(cat, fakeClock++));
+        public void enqueue(Animal a) throws IllegalArgumentException {
+            if (a instanceof Dog) {
+                dogs.add(new AnimalRecord<Dog>((Dog) a, fakeClock++));
+            } else if (a instanceof Cat) {
+                cats.add(new AnimalRecord<Cat>((Cat) a, fakeClock++));
+            } else {
+                throw new IllegalArgumentException("This animal shelter only accepts dogs and cats!");
+            }
         }
 
         public Animal dequeueAny() {
@@ -55,28 +57,23 @@ public class Prob_03_06 {
         }
 
         public Dog dequeueDog() {
-            return dequeue(dogs);
+            return dequeueAnimal(dogs);
         }
 
         public Cat dequeueCat() {
-            return dequeue(cats);
+            return dequeueAnimal(cats);
         }
 
-        private static <T extends Animal> T dequeue(LinkedList<AnimalRecord<T>> list) {
-            AnimalRecord<T> ar = removeFirstOrNull(list);
+        private static <T extends Animal> T dequeueAnimal(LinkedList<AnimalRecord<T>> list) {
+            AnimalRecord<T> ar = list.poll();
             return ar == null ? null : ar.animal;
         }
-
-        private static <T> T removeFirstOrNull(LinkedList<T> list) {
-            return list.isEmpty() ? null : list.removeFirst();
-        }
-
     }
 
     private static class AnimalRecord<T extends Animal> {
-        T animal;
+        private T animal;
         // "Time" simplified to an int. True implementation would use something like DateTime.
-        int arrivalTime;
+        private int arrivalTime;
 
         public AnimalRecord(T animal, int arrivalTime) {
             this.animal = animal;
@@ -85,9 +82,14 @@ public class Prob_03_06 {
     }
 
     private static class Animal {
-        String name;
+        private String name;
+
         public Animal(String name) {
             this.name = name;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 
