@@ -6,7 +6,7 @@ public class Prob_04_02 {
         System.out.println(minBstRoot.toStringInOrder());
     }
 
-    private static TreeNode buildMinBst(int[] sorted) {
+    public static TreeNode buildMinBst(int[] sorted) {
         return minBstHelper(sorted, 0, sorted.length - 1);
     }
 
