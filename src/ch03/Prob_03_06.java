@@ -1,3 +1,5 @@
+package ch03;
+
 import java.util.LinkedList;
 
 public class Prob_03_06 {

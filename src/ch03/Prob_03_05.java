@@ -1,3 +1,5 @@
+package ch03;
+
 import java.util.Stack;
 
 public class Prob_03_05 {

@@ -1,3 +1,5 @@
+package common;
+
 // Provided in book's "Code Library"
 public class LinkedListNode {
     public LinkedListNode next, prev, last;

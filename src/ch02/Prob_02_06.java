@@ -1,3 +1,6 @@
+package ch02;
+
+import common.LinkedListNode;
 import java.util.Stack;
 
 public class Prob_02_06 {

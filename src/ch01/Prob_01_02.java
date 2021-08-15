@@ -1,3 +1,5 @@
+package ch01;
+
 public class Prob_01_02 {
     public static final int CHARS = 256;
 

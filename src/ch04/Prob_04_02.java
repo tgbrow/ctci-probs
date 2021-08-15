@@ -1,3 +1,7 @@
+package ch04;
+
+import common.TreeNode;
+
 public class Prob_04_02 {
 
     public static void main(String[] args) {

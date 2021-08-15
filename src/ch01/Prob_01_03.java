@@ -1,3 +1,5 @@
+package ch01;
+
 public class Prob_01_03 {
 
     public static void main(String[] args) throws Exception {

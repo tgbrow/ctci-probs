@@ -1,3 +1,7 @@
+package ch02;
+
+import common.LinkedListNode;
+
 public class Prob_02_08 {
 
     public static void main(String[] args) {

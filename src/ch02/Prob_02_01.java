@@ -1,5 +1,8 @@
-import java.util.Set;
+package ch02;
+
+import common.LinkedListNode;
 import java.util.HashSet;
+import java.util.Set;
 
 public class Prob_02_01 {
 

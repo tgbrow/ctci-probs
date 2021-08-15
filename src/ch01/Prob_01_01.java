@@ -1,3 +1,5 @@
+package ch01;
+
 import java.util.Set;
 import java.util.HashSet;
 
