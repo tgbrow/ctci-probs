@@ -5,6 +5,10 @@ public class TreeNode {
     public TreeNode left;
     public TreeNode right;
 
+    public TreeNode(int data) {
+        this.data = data;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         toString(sb, -1);
