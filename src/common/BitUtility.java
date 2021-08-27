@@ -1,6 +1,6 @@
 package common;
 
-public class Utility {
+public class BitUtility {
 
     public static final int INT_BITS = 8 * Integer.BYTES;
 

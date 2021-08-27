@@ -1,6 +1,6 @@
 package ch05;
 
-import static common.Utility.bitStrCompact;
+import static common.BitUtility.bitStrCompact;
 
 public class Prob_05_03 {
 

@@ -1,10 +1,10 @@
 package ch05;
 
-import static common.Utility.INT_BITS;
-import static common.Utility.bitStrCompact;
-import static common.Utility.getBit;
-import static common.Utility.makeBitOne;
-import static common.Utility.makeBitZero;
+import static common.BitUtility.INT_BITS;
+import static common.BitUtility.bitStrCompact;
+import static common.BitUtility.getBit;
+import static common.BitUtility.makeBitOne;
+import static common.BitUtility.makeBitZero;
 
 public class Prob_05_04 {
 
