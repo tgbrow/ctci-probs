@@ -4,32 +4,34 @@ import static common.BitUtility.INT_BITS;
 import static common.BitUtility.bitStrCompact;
 import static common.BitUtility.getBit;
 import static common.BitUtility.makeBitOne;
-import static common.BitUtility.makeBitZero;
 
 public class Prob_05_04 {
 
+    private static final int MAX_TEST_VAL = 123_456_789;
+    private static final int MILLION = 1_000_000;
+    private static final int MSG_INTERVAL = 5 * MILLION;
+
     public static void main(String[] args) {
-        int min = 25;
-        int max = 100;
-        int[] testData = new int[max - min + 1];
-        for (int i = 0; i < testData.length; ++i) {
-            testData[i] = min + i;
-        }
-        for (int x : testData) {
-            int res = findSameOnesLarger(x);
-            int bruteRes = bruteForceLarger(x);
+        for (int i = 0; i <= MAX_TEST_VAL; ++i) {
+            int res = findSameOnesLarger(i);
+            int bruteRes = bruteForceLarger(i);
             if (res != bruteRes) {
-                printDiff(x, res, bruteRes, true);
+                printDiff(i, res, bruteRes, true);
                 return;
             }
 
-            res = findSameOnesSmaller(x);
-            bruteRes = bruteForceSmaller(x);
+            res = findSameOnesSmaller(i);
+            bruteRes = bruteForceSmaller(i);
             if (res != bruteRes) {
-                printDiff(x, res, bruteRes, false);
+                printDiff(i, res, bruteRes, false);
                 return;
             }
+
+            if (i % MSG_INTERVAL == 0 && i != 0) {
+                System.out.println((i / MILLION) + " million cases completed\n...");
+            }
         }
+        System.out.println("All " + MAX_TEST_VAL + " cases completed successfully!");
     }
 
     private static void printDiff(int x, int actual, int expected, boolean larger) {
@@ -45,72 +47,60 @@ public class Prob_05_04 {
         // If input (sans leading 0s) is composed of all 1s, there is no solution.
         if (allOnes(x)) return 0;
 
-        // Counts of 0s and 1s *before* the first "10" sequence.
-        int zeroCnt = 0;
-        int oneCnt = 0;
-
-        for (int i = 0; i < INT_BITS; ++i) {
-            int bit = getBit(x, i);
-            if (bit == 0 && getBit(x, i+1) == 1) {
-                // We found the first "10" sequence.
-                // Swap this bit and the next, i.e. turn "10" into "01".
-                int nextSmallest = makeBitZero(x, i+1);
-                nextSmallest = makeBitOne(nextSmallest, i);
-                // Arrange the trailing bits to make as large a number as possible, i.e. push all
-                // the 1s as far left as possible.
-                if (oneCnt > 0 && zeroCnt > 0) {
-                    // Clear the least-significant "oneCnt + ZeroCnt" bits, then "or" in our desired suffix.
-                    nextSmallest &= ~0 << (oneCnt + zeroCnt);
-                    nextSmallest |= ~(~0 << oneCnt) << zeroCnt;
-                }
-                return nextSmallest;
-            }
-
-            if (bit == 0) {
-                ++zeroCnt;
-            } else { // implicit: bit == 1
-                ++oneCnt;
-            }
+        // Iterate (from LSB to MSB) until we reach a 0.
+        // numOnes will be the number of trailing 1s.
+        int i = 0;
+        while (i < INT_BITS && getBit(x, i) == 1) {
+            ++i;
         }
+        int numOnes = i;
 
-        // This should be unreachable.
-        return -1;
+        // Iterate past any 0s until we reach the next 1.
+        while (i < INT_BITS && getBit(x, i) == 0) {
+            ++i;
+        }
+        // The bit at i is a 1. Count it.
+        ++numOnes;
+
+        // The idea now is to turn the "10" (starting at i) into "01". Then, arrange the remaining
+        // bits to the right to make as large a number as possible while preserving the 1s count,
+        // i.e. place the 1s as far left as possible.
+        // In other words, we want the bits from i rightward to look like: 0{numOnes 1s}{0s through i=0}
+
+        // To do this, we first clear all bits from i rightward.
+        int result = x & (~0 << (i+1));
+        // Then fill in the most-significant bits to the right of bit i with as many 1s as needed.
+        return result | ~(~0 << numOnes) << (i - numOnes);
     }
 
     private static int findSameOnesLarger(int x) {
         // Only handle positive inputs.
         if (x < 1) return 0;
 
-        // Counts of 0s and 1s *before* the first "01" sequence.
-        int zeroCnt = 0;
-        int oneCnt = 0;
-
-        for (int i = 0; i < INT_BITS; ++i) {
-            int bit = getBit(x, i);
-            if (bit == 1 && getBit(x, i+1) == 0) {
-                // We found the first "01" sequence.
-                // Swap this bit and the next, i.e. turn "01" into "10".
-                int nextLargest = makeBitOne(x, i+1);
-                nextLargest = makeBitZero(nextLargest, i);
-                // Arrange the trailing bits to make as small a number as possible, i.e. push all
-                // the 1s as far right as possible.
-                if (oneCnt > 0 && zeroCnt > 0) {
-                    // Clear the least-significant "oneCnt + ZeroCnt" bits, then "or" in our desired suffix.
-                    nextLargest &= ~0 << (oneCnt + zeroCnt);
-                    nextLargest |= ~(~0 << oneCnt);
-                }
-                return nextLargest;
-            }
-
-            if (bit == 0) {
-                ++zeroCnt;
-            } else { // implicit: bit == 1
-                ++oneCnt;
-            }
+        // Iterate (from LSB to MSB) until we reach a 1.
+        int i = 0;
+        while (i < INT_BITS && getBit(x, i) == 0) {
+            ++i;
         }
 
-        // This should be unreachable.
-        return -1;
+        // Iterate past any 1s until we reach the next 0.
+        int numOnes = 0;
+        while (i < INT_BITS && getBit(x, i) == 1) {
+            ++numOnes;
+            ++i;
+        }
+
+        // The idea now is to turn the "01" (starting at i) into "10". Then, arrange the remaining
+        // bits to the right to make as small a number as possible while preserving the 1s count,
+        // i.e. place the 1s as far right as possible.
+        // In other words, we want the bits from i rightward to look like: 1{trailingZeros 0s}{1s through i=0}
+
+        // To do this, first set bit i to 1.
+        int result = makeBitOne(x, i);
+        // Next, clear all bits to the right of bit i.
+        result &= (~0 << i);
+        // Then fill in the least-significant bits with as many 1s as needed.
+        return result | ~(~0 << (numOnes - 1));
     }
 
     private static int bruteForceSmaller(int x) {
