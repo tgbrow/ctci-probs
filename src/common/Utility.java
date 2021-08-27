@@ -2,6 +2,8 @@ package common;
 
 public class Utility {
 
+    public static final int INT_BITS = 8 * Integer.BYTES;
+
     public static String bitStrFull(int x) {
         return bitStr(x, false);
     }
@@ -21,5 +23,35 @@ public class Utility {
         }
         return str;
     }
-    
+
+    public static int getBit(int x, int bitIdx) {
+        if (!isValidIntBitIdx(bitIdx)) {
+            throw new IllegalArgumentException("Invalid bit index!");
+        }
+        return (x >> bitIdx) & 1;
+    }
+
+    public static int makeBitZero(int x, int bitIdx) {
+        return setBit(x, bitIdx, 0);
+    }
+
+    public static int makeBitOne(int x, int bitIdx) {
+        return setBit(x, bitIdx, 1);
+    }
+
+    private static int setBit(int x, int bitIdx, int value) {
+        if (!isValidIntBitIdx(bitIdx)) {
+            throw new IllegalArgumentException("Invalid bit index!");
+        }
+        if (value != 0 && value != 1) {
+            throw new IllegalArgumentException("Invalid bit value!");
+        }
+        int mask = 1 << bitIdx;
+        return value == 0 ? x ^ mask : x | mask;
+    }
+
+    private static boolean isValidIntBitIdx(int bitIdx) {
+        return bitIdx >= 0 && bitIdx < INT_BITS;
+    }
+
 }
