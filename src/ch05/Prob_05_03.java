@@ -1,5 +1,6 @@
 package ch05;
 
+import static common.BitUtility.INT_BITS;
 import static common.BitUtility.bitStrCompact;
 
 public class Prob_05_03 {
@@ -25,7 +26,7 @@ public class Prob_05_03 {
     private static int oneRunCompact(int x) {
         // Note: These checks are optional / only for purpose of optimization.
         if (x == 0) return 0;
-        if (x == ~0) return 8 * Integer.BYTES;
+        if (x == ~0) return INT_BITS;
 
         int maxOnes = 0;
         int currOnes = 0;
@@ -47,7 +48,7 @@ public class Prob_05_03 {
     private static int oneRunExplicit(int x) {
         // Note: These checks are optional / only for purpose of optimization.
         if (x == 0) return 0;
-        if (x == ~0) return 8 * Integer.BYTES;
+        if (x == ~0) return INT_BITS;
 
         int longest = 0;
         int prevDigit = 0;
