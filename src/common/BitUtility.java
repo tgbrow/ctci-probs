@@ -2,7 +2,8 @@ package common;
 
 public class BitUtility {
 
-    public static final int INT_BITS = 8 * Integer.BYTES;
+    public static final int BYTE_BITS = 8;
+    public static final int INT_BITS  = Integer.BYTES * BYTE_BITS;
 
     public static String bitStrFull(int x) {
         return bitStr(x, false);
